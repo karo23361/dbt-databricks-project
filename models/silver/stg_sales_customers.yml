@@ -1,0 +1,26 @@
+version: 2
+
+models:
+  - name: stg_sales_customers
+    description: "Cleaned and standardized customer data from raw layer"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier."
+        tests:
+          - not_null
+          - unique
+
+      - name: email
+        description: "Customer email address."
+        tests:
+          - not_null
+
+      - name: postal_code
+        description: "Postal or ZIP code."
+        tests:
+          - not_null
+
+      - name: country
+        description: "Country of residence."
+        tests:
+          - not_null
