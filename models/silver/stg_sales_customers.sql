@@ -1,3 +1,5 @@
+{{ config(materialized='incremental', file_format='delta') }}
+
 with source as (
 
     select * 
@@ -7,23 +9,26 @@ with source as (
 
 silver_stg as (
 
-    select
-        customerID          as customer_id,
-        first_name          as first_name,
-        last_name           as last_name,
+    select 
+        customerID as customer_id,
         concat(first_name, ' ', last_name) as full_name,
-        email_address       as email,
-        phone_number        as phone,
-        address             as address,
-        city                as city,
-        state               as state,
-        country             as country,
-        continent           as continent,
-        postal_zip_code     as postal_code,
-        gender              as gender,
-        current_timestamp() as ingested_at
+        trim(email) as email,
+        trim(regexp_replace(phone_number, '[^0-9+]','')) as phone,
+        address as address,
+        ltrim(city) as city,
+        ltrim(state) as state,
+        ltrim(country) as country,
+        ltrim(continent) as continent,
+        trim(postal_zip_code) as postal_code,
+        trim(gender) as gender,
+        current_timestamp() as ingested_at,
+        current_timestamp() as updated_at
     from source
 
 )
 
-select * from silver_stg;
+select * from silver_stg
+
+{% if is_incremental() %}
+where updated_at > (select max(updated_at) from {{ this }})
+{% endif %}
