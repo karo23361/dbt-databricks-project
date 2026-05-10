@@ -25,6 +25,5 @@ models:
 
 
 on-run-start:
-- "CREATE SCHEMA IF NOT EXISTS {{ target.catalog }}.bronze"
 - "CREATE SCHEMA IF NOT EXISTS {{ target.catalog }}.silver"
 - "CREATE SCHEMA IF NOT EXISTS {{ target.catalog }}.gold"

@@ -12,15 +12,15 @@ silver_stg as (
     select 
         customerID as customer_id,
         concat(first_name, ' ', last_name) as full_name,
-        trim(email) as email,
+        {{ clean_string('email_address') }} as email,
         trim(regexp_replace(phone_number, '[^0-9+]','')) as phone,
         address as address,
         ltrim(city) as city,
         ltrim(state) as state,
         ltrim(country) as country,
         ltrim(continent) as continent,
-        trim(postal_zip_code) as postal_code,
-        trim(gender) as gender,
+        {{ clean_string('postal_zip_code') }} as postal_code,
+        {{ clean_string('gender') }} as gender,
         current_timestamp() as ingested_at,
         current_timestamp() as updated_at
     from source
