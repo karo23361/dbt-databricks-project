@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg_sales_customers
+    description: "Cleaned and standardized customer data from raw layer"
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier."
+        tests:
+          - not_null
+          - unique
+
+      - name: email
+        description: "Customer email address."
+        tests:
+          - dbt_expectations.expect_column_values_to_match_regex:
+              arguments:
+                regex: '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+          - not_null
+
+      - name: postal_code
+        description: "Postal or ZIP code."
+        tests:
+          - not_null
+
+      - name: country
+        description: "Country of residence."
+        tests:
+          - not_null

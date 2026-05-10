@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: customers_by_country
+    description: "Aggregated customer metrics by country."
+
+    columns:
+      - name: country
+        tests:
+          - not_null
+
+      - name: customers_count
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+
+      - name: unique_customers
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
